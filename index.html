@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Entrega de Beneficios</title>
+    
+  
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+ <!-- The core Firebase JS SDK is always required and must be listed first -->
+ <!-- <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>-->
+ <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+
+    <h2>Area de Registro</h2>
+    <input id="nombre" type="text" placeholder="Ingresa el Nombre">
+    <br/>
+    <input id="pApellido" type="text" placeholder="Ingresa el Primer Apellido">
+    <br/>
+    <input id="sApellido" type="text" placeholder="Ingresa el Segundo Apellido">
+    <br/>
+    <input id="email" type="email" placeholder="Ingresa Email">
+    <br/>
+    <input id="contrasena" type="password" placeholder="Ingresa Contraseña">
+    <button onclick="registrar()">Registro</button>
+    <br/>
+    
+
+    <h2>Area de Acceso</h2>
+    <input id="emaila" type="email" placeholder="Ingresa Email">
+    <br/>
+    <input id="contrasenaa" type="password" placeholder="Ingresa Contraseña">
+    <button onclick="accesar()">Accesar</button>
+    <br/>
+    <h2 id="logStatus"> </h2>
+    <button id="salir" onclick="salir()">Salir</button>
+
+    <button id="guardarDatos" onclick="writeUserData()">Guardar sus Datos</button>
+    <h3 id="userUid">User UID</h3>
+    
+    <script src="../firebase.js"></script>
+
+    <script src="app.js"></script>
+
+
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
+    
+    <!-- Add Firebase products that you want to use 
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>-->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-database.js"></script>
+    
+    
+    
+    
+    <script>
+    //  link del video: https://www.youtube.com/watch?v=fZWOb7Z-TG4
+    
+      // Your web app's Firebase configuration
+      var //firebaseConfig = {
+           config = {
+        apiKey: "AIzaSyA7Dsd1nJNNcN8-wCcO6vJGNr_BWnTh6UE",
+        authDomain: "entrega-b9fc2.firebaseapp.com",
+        databaseURL: "https://entrega-b9fc2.firebaseio.com",
+        projectId: "entrega-b9fc2",
+        storageBucket: "entrega-b9fc2.appspot.com",
+        messagingSenderId: "491309147764",
+        appId: "1:491309147764:web:6ec78adb7c3318ab349321",
+        measurementId: "G-H60T3G8TS8"
+      };
+ // Initialize Firebase
+     // firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(config);
+      firebase.analytics();
+      
+
+
+
+
+ //Instalacion del observador de usuarios Logueados
+      firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var emailVerified = user.emailVerified;
+    var photoURL = user.photoURL;
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    var emailVerificado="";
+    if (emailVerified===false){
+      emailVerificado="Email No Verificado";
+    }else{
+      emailVerificado="Email Verificado";
+    }
+    var providerData = user.providerData;
+    document.getElementById("logStatus").innerHTML="Activo como:  " + user.email + emailVerificado + user.uid;
+    document.getElementById("userUid").innerHTML="User UID: "+user.uid;
+    console.log(user);
+    console.log(uid);
+    // ...
+  } else {
+    // User is signed out.
+    document.getElementById("logStatus").innerHTML="No Logeado";
+  }
+});
+
+var database = firebase.database();
+      function writeUserData(userId, name, email, imageUrl) {
+  firebase.database().ref('users/' + userId).set({
+    telefono: "1234567890",
+    nombre: "ERIC MOISES",
+    papellido: "MERCADO",
+    sapellido: "PEREZ",
+    email: "email@gmail.com"
+  });
+}
+//document.getElementById(guardarDatos).onclick(writeUserData);
+</script>
+<script>
+// Escribir en la base de datos
+
+
+
+
+ 
+
+ 
+/* $("#guardarDatos").click(function(){
+  firebase.database().ref("Anfitriones Asignados")
+  .set({
+    nombre:"Eric",
+    edad:"47",
+    sexo: "h",
+  })
+}); */
+ 
+    </script>
+    
+
+</body>
+</html>

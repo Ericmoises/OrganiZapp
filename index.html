@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Entrega de Beneficios</title>
+    <title>OrganiZapp</title>
     
   
     <script
@@ -20,12 +20,15 @@
  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
 
-    <h2>Area de Registro</h2>
+    <h4>Area de Registro Usuarios (Solo Admin) </h4>
+   
     <input id="nombre" type="text" placeholder="Ingresa el Nombre">
     <br/>
     <input id="pApellido" type="text" placeholder="Ingresa el Primer Apellido">
     <br/>
     <input id="sApellido" type="text" placeholder="Ingresa el Segundo Apellido">
+    <br/>
+    <input id="tel" type="email" placeholder="Tel sin Signos">
     <br/>
     <input id="email" type="email" placeholder="Ingresa Email">
     <br/>
@@ -34,7 +37,7 @@
     <br/>
     
 
-    <h2>Area de Acceso</h2>
+    <h4>Area de Acceso</h4>
     <input id="emaila" type="email" placeholder="Ingresa Email">
     <br/>
     <input id="contrasenaa" type="password" placeholder="Ingresa Contraseña">
@@ -60,7 +63,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>-->
     <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
     
-    <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
     
     
     
@@ -69,8 +72,8 @@
     //  link del video: https://www.youtube.com/watch?v=fZWOb7Z-TG4
     
       // Your web app's Firebase configuration
-      var //firebaseConfig = {
-           config = {
+      var firebaseConfig = {
+           //config = {
         apiKey: "AIzaSyA7Dsd1nJNNcN8-wCcO6vJGNr_BWnTh6UE",
         authDomain: "entrega-b9fc2.firebaseapp.com",
         databaseURL: "https://entrega-b9fc2.firebaseio.com",
@@ -81,9 +84,9 @@
         measurementId: "G-H60T3G8TS8"
       };
  // Initialize Firebase
-     // firebase.initializeApp(firebaseConfig);
-      firebase.initializeApp(config);
-      firebase.analytics();
+      firebase.initializeApp(firebaseConfig);
+      //firebase.initializeApp(config);
+      //firebase.analytics();
       
 
 
@@ -99,6 +102,15 @@
     var photoURL = user.photoURL;
     var isAnonymous = user.isAnonymous;
     var uid = user.uid;
+//Prueba
+    firebase.database().ref('bancoDeAnfitriones/'+ uid ).set({
+      email : email,
+      nombre : document.getElementById('nombre').value,
+      papellido : document.getElementById('pApellido').value,
+      sapellido : document.getElementById('sApellido').value,
+      tel : document.getElementById('tel').value,
+    });
+
     var emailVerificado="";
     if (emailVerified===false){
       emailVerificado="Email No Verificado";
@@ -113,19 +125,21 @@
     // ...
   } else {
     // User is signed out.
-    document.getElementById("logStatus").innerHTML="No Logeado";
+    document.getElementById("logStatus").innerHTML="No Activo";
   }
 });
 
 var database = firebase.database();
+
       function writeUserData(userId, name, email, imageUrl) {
-  firebase.database().ref('users/' + userId).set({
+    firebase.database().ref('bancoDeAnfitriones/'+ userId ).set({
     telefono: "1234567890",
     nombre: "ERIC MOISES",
     papellido: "MERCADO",
     sapellido: "PEREZ",
     email: "email@gmail.com"
   });
+ 
 }
 //document.getElementById(guardarDatos).onclick(writeUserData);
 </script>

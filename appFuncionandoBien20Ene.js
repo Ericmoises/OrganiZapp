@@ -16,6 +16,16 @@ function registrar(){
   })
 }
 
+/* // Escribir en la base de datos
+$("#guardarDatos").click(function(){
+  firebase.database().ref("Anfitriones Asignados")
+  .set({
+    nombre:"Eric",
+    edad:"47",
+    sexo: "h",
+  })
+}); */
+
 function accesar(){
   var emaila = document.getElementById('emaila').value;
   var contrasenaa = document.getElementById('contrasenaa').value;

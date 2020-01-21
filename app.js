@@ -13,9 +13,32 @@ function registrar(){
   })
   .then(function(){
     verificarEmail();
+//Prueba
+    creaBase();
   })
 }
 
+//Prueba
+function creaBase(){
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      var displayName = user.displayName;
+      var email = user.email;
+      var emailVerified = user.emailVerified;
+      var photoURL = user.photoURL;
+      var isAnonymous = user.isAnonymous;
+      var uid = user.uid;
+firebase.database().ref('bancoDeAnfitriones/'+ uid ).set({
+  email : email,
+  nombre : document.getElementById('nombre').value,
+  papellido : document.getElementById('pApellido').value,
+  sapellido : document.getElementById('sApellido').value,
+  tel : document.getElementById('tel').value,
+});
+}
+  }) 
+}
 function accesar(){
   var emaila = document.getElementById('emaila').value;
   var contrasenaa = document.getElementById('contrasenaa').value;

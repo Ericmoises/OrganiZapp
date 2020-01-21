@@ -43,13 +43,13 @@
     <input id="contrasenaa" type="password" placeholder="Ingresa Contraseña">
     <button onclick="accesar()">Accesar</button>
     <br/>
-    <h2 id="logStatus"> </h2>
+    <h4 id="logStatus"> </h4>
     <button id="salir" onclick="salir()">Salir</button>
 
     <button id="guardarDatos" onclick="writeUserData()">Guardar sus Datos</button>
-    <h3 id="userUid">User UID</h3>
+    <h4 id="userUid">User UID</h4>
     
-    <script src="../firebase.js"></script>
+    <!-- <script src="../firebase.js"></script> -->
 
     <script src="app.js"></script>
 
@@ -92,7 +92,7 @@
 
 
 
- //Instalacion del observador de usuarios Logueados
+ //Instalacion del observador de usuarios 
       firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
@@ -103,13 +103,13 @@
     var isAnonymous = user.isAnonymous;
     var uid = user.uid;
 //Prueba
-    firebase.database().ref('bancoDeAnfitriones/'+ uid ).set({
+/*     firebase.database().ref('bancoDeAnfitriones/'+ uid ).set({
       email : email,
       nombre : document.getElementById('nombre').value,
       papellido : document.getElementById('pApellido').value,
       sapellido : document.getElementById('sApellido').value,
       tel : document.getElementById('tel').value,
-    });
+    }); */
 
     var emailVerificado="";
     if (emailVerified===false){
@@ -118,7 +118,7 @@
       emailVerificado="Email Verificado";
     }
     var providerData = user.providerData;
-    document.getElementById("logStatus").innerHTML="Activo como:  " + user.email + emailVerificado + user.uid;
+    document.getElementById("logStatus").innerHTML="Activo como:  " + user.email +"<br/>"+ emailVerificado + "<br/>"+"User UID: " + user.uid;
     document.getElementById("userUid").innerHTML="User UID: "+user.uid;
     console.log(user);
     console.log(uid);

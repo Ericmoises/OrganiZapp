@@ -33,20 +33,25 @@
     <input id="email" type="email" placeholder="Ingresa Email">
     <br/>
     <input id="contrasena" type="password" placeholder="Ingresa Contraseña">
-    <button onclick="registrar()">Registro</button>
     <br/>
-    
+    <input id="confirmaContrasena" type="password" placeholder="Confirma Contraseña">
+    <p><input type="checkbox" id="esAdmin">Es Administrador</p>
+    <button onclick="registrar()">Registrar</button>
+    <button id="checar" onclick="valorContr()">Checar Valor Contrasena</button>
+    <br/>
+    <hr/>
 
     <h4>Area de Acceso</h4>
-    <input id="emaila" type="email" placeholder="Ingresa Email">
+    <input id="emailAcceso" type="email" placeholder="Ingresa Email">
     <br/>
-    <input id="contrasenaa" type="password" placeholder="Ingresa Contraseña">
+    <input id="contrasenaAcceso" type="password" placeholder="Ingresa Contraseña">
     <button onclick="accesar()">Accesar</button>
     <br/>
     <h4 id="logStatus"> </h4>
     <button id="salir" onclick="salir()">Salir</button>
+    
 
-    <button id="guardarDatos" onclick="writeUserData()">Guardar sus Datos</button>
+    <!-- <button id="guardarDatos" onclick="writeUserData()">Guardar sus Datos</button> -->
     <h4 id="userUid">User UID</h4>
     
     <!-- <script src="../firebase.js"></script> -->
@@ -102,15 +107,6 @@
     var photoURL = user.photoURL;
     var isAnonymous = user.isAnonymous;
     var uid = user.uid;
-//Prueba
-/*     firebase.database().ref('bancoDeAnfitriones/'+ uid ).set({
-      email : email,
-      nombre : document.getElementById('nombre').value,
-      papellido : document.getElementById('pApellido').value,
-      sapellido : document.getElementById('sApellido').value,
-      tel : document.getElementById('tel').value,
-    }); */
-
     var emailVerificado="";
     if (emailVerified===false){
       emailVerificado="Email No Verificado";
@@ -131,38 +127,10 @@
 
 var database = firebase.database();
 
-      function writeUserData(userId, name, email, imageUrl) {
-    firebase.database().ref('bancoDeAnfitriones/'+ userId ).set({
-    telefono: "1234567890",
-    nombre: "ERIC MOISES",
-    papellido: "MERCADO",
-    sapellido: "PEREZ",
-    email: "email@gmail.com"
-  });
- 
+function valorContr(){
+console.log(document.getElementById('contrasena').value);
 }
-//document.getElementById(guardarDatos).onclick(writeUserData);
+
 </script>
-<script>
-// Escribir en la base de datos
-
-
-
-
- 
-
- 
-/* $("#guardarDatos").click(function(){
-  firebase.database().ref("Anfitriones Asignados")
-  .set({
-    nombre:"Eric",
-    edad:"47",
-    sexo: "h",
-  })
-}); */
- 
-    </script>
-    
-
 </body>
 </html>

@@ -11,6 +11,8 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
+    <script lang="javascript" src="js/xlsx.full.min.js"></script>
+
 
 
 </head>
@@ -19,6 +21,16 @@
  <!-- <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>-->
  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+ 
+ <!-- TODO: Add SDKs for Firebase products that you want to use
+  https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
+    
+  <!-- Add Firebase products that you want to use 
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>-->
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+         
 
     <h4>Area de Registro Usuarios (Solo Admin) </h4>
    
@@ -37,11 +49,10 @@
     <input id="confirmaContrasena" type="password" placeholder="Confirma Contraseña">
     <p><input type="checkbox" id="esAdmin">Es Administrador</p>
     <button onclick="registrar()">Registrar</button>
-    <button id="checar" onclick="valorContr()">Checar Valor Contrasena</button>
     <br/>
     <hr/>
 
-    <h4>Area de Acceso</h4>
+    <h4>Area de Acceso (Todos los Usuarios)</h4>
     <input id="emailAcceso" type="email" placeholder="Ingresa Email">
     <br/>
     <input id="contrasenaAcceso" type="password" placeholder="Ingresa Contraseña">
@@ -49,36 +60,89 @@
     <br/>
     <h4 id="logStatus"> </h4>
     <button id="salir" onclick="salir()">Salir</button>
-    
-
-    <!-- <button id="guardarDatos" onclick="writeUserData()">Guardar sus Datos</button> -->
     <h4 id="userUid">User UID</h4>
-    
-    <!-- <script src="../firebase.js"></script> -->
+    <hr/>
 
+    <h4>Area de Carga de Eventos (Solo Admin)</h4>
+    <input id="nombreEvento" type="text" placeholder="Nombre del Evento">
+    <br/>
+    <input id="descripcionEvento" type="text" placeholder="Descripción del Evento">
+    <br/>
+    <p><input id="fechanEvento" type="date" placeholder="Fecha del Evento"> Fecha</p>
+    <p><input id="horaInicio" type="time" placeholder="Hora de Inicio">Inicio</p>
+    <input id="horaFin" type="time" placeholder="Hora de Finalización" required=”required”>Fin</p>
+
+    <p><button id="registraEvento" onclick="registrarEvento()">Registrar Evento</button></p>
+    <hr/>
+    <button id="consultaEvento" onclick="consultarEventos()">Consultar Eventos</button>
+    <br/>
+    <button id="editaEvento" onclick="editarEvento()">Editar Evento</button>
+    <br/>
+    <hr/>
+    <script>
+   
+      function registrarEvento(){
+            firebase.database().ref('eventos/').push({
+          nombre: document.getElementById('nombreEvento').value.toUpperCase(),
+          "descripcion": document.getElementById('descripcionEvento').value.toUpperCase(),
+            })
+        }
+     
+    
+    </script>
+
+
+    <h4>Area de Carga de Beneficiarios (Solo Admin)</h4>
+
+    
+    <script>
+
+      $(document).ready(function(){
+            $("#fileUploader").change(function(evt){
+                  var selectedFile = evt.target.files[0];
+                  var reader = new FileReader();
+                  reader.onload = function(event) {
+                    var data = event.target.result;
+                    var workbook = XLSX.read(data, {
+                        type: 'binary'
+                    });
+                    workbook.SheetNames.forEach(function(sheetName) {
+                      
+                        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                        var json_object = JSON.stringify(XL_row_object);
+                        document.getElementById("jsonObject").innerHTML = json_object;
+
+                       // Comprobar valor de json_object
+                        console.log(json_object);
+                        
+                    firebase.database().ref('eventos/evento1/beneficiarios/').set(JSON.parse(json_object)) ({
+                      
+                          })
+                       
+                      })
+                  };
+                  reader.onerror = function(event) {
+                    console.error("File could not be read! Code " + event.target.error.code);
+                  };
+                  reader.readAsBinaryString(selectedFile);
+            });
+                
+
+      });
+  </script>
+    <input type="file" id="fileUploader" name="fileUploader" accept=".xls, .xlsx"/>
+    </br></br>
+    <label id="jsonObject"> JSON : </label>
+
+    <!-- <script src="../firebase.js"></script> -->
     <script src="app.js"></script>
 
 
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
-    
-    <!-- Add Firebase products that you want to use 
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>-->
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
-    
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
-    
-    
-    
-    
     <script>
     //  link del video: https://www.youtube.com/watch?v=fZWOb7Z-TG4
     
       // Your web app's Firebase configuration
       var firebaseConfig = {
-           //config = {
         apiKey: "AIzaSyA7Dsd1nJNNcN8-wCcO6vJGNr_BWnTh6UE",
         authDomain: "entrega-b9fc2.firebaseapp.com",
         databaseURL: "https://entrega-b9fc2.firebaseio.com",
@@ -90,7 +154,7 @@
       };
  // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-      //firebase.initializeApp(config);
+  
       //firebase.analytics();
       
 
@@ -127,10 +191,10 @@
 
 var database = firebase.database();
 
-function valorContr(){
-console.log(document.getElementById('contrasena').value);
-}
-
 </script>
+<br/>
+
+
+
 </body>
 </html>

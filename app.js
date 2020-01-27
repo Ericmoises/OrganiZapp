@@ -1,6 +1,6 @@
   
 function registrar(){
-  //verifica que la contraseña y su verificación coincidan para proceder a registrar
+  //verifica que la contraseña y su confirmación coincidan para proceder a registrar
   if(document.getElementById('contrasena').value!==document.getElementById('confirmaContrasena').value){
     alert("Verifica la Contraseña");
    }else
@@ -22,7 +22,7 @@ function registrar(){
 }
 }
 
-
+//si hay cambios al registrarse
 function writeUserData(){
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

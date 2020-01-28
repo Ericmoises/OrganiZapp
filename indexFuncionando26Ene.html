@@ -40,7 +40,7 @@
     <br/>
     <input id="sApellido" type="text" placeholder="Ingresa el Segundo Apellido">
     <br/>
-    <input id="tel" type="tel" placeholder="Tel sin Signos">
+    <input id="tel" type="email" placeholder="Tel sin Signos">
     <br/>
     <input id="email" type="email" placeholder="Ingresa Email">
     <br/>
@@ -60,7 +60,7 @@
     <br/>
     <h4 id="logStatus"> </h4>
     <button id="salir" onclick="salir()">Salir</button>
-    <h3 id="userUid">User UID</h3>
+    <h4 id="userUid">User UID</h4>
     <hr/>
 
     <h4>Area de Carga de Eventos (Solo Admin)</h4>
@@ -68,16 +68,14 @@
     <br/>
     <input id="descripcionEvento" type="text" placeholder="Descripción del Evento">
     <br/>
-    <input id="fechanEvento" type="date" placeholder="Fecha del Evento"> Fecha
-    <br/>
-    <input id="horaInicio" type="time" placeholder="Hora de Inicio">Hora Inicio
-    <br/>
-    <input id="horaFin" type="time" placeholder="Hora de Finalización" required=”required”>Hora Final
+    <p><input id="fechanEvento" type="date" placeholder="Fecha del Evento"> Fecha</p>
+    <p><input id="horaInicio" type="time" placeholder="Hora de Inicio">Inicio</p>
+    <input id="horaFin" type="time" placeholder="Hora de Finalización" required=”required”>Fin</p>
 
     <p><button id="registraEvento" onclick="registrarEvento()">Registrar Evento</button></p>
     <hr/>
     <button id="consultaEvento" onclick="consultarEventos()">Consultar Eventos</button>
-    <br/><br/>
+    <br/>
     <button id="editaEvento" onclick="editarEvento()">Editar Evento</button>
     <br/>
     <hr/>
@@ -86,24 +84,20 @@
       function registrarEvento(){
             firebase.database().ref('eventos/').push({
           nombre: document.getElementById('nombreEvento').value.toUpperCase(),
-          descripcion: document.getElementById('descripcionEvento').value.toUpperCase(),
-          fecha: document.getElementById('fechanEvento').value,
-    //Falta Los valores de hora no se insertan en la base de datos
-          horainicio:document.getElementById('horaInicio').value,
-          horafin:document.getElementById('horaFin').value,
+          "descripcion": document.getElementById('descripcionEvento').value.toUpperCase(),
             })
         }
      
     
     </script>
 
-<!-- Falta Seleccionar un Evento ya existente en base de datos -->
+
     <h4>Area de Carga de Beneficiarios (Solo Admin)</h4>
 
     
     <script>
 
-      $(document).ready(function(){ //Transforma archivo xlsx a JSON
+      $(document).ready(function(){
             $("#fileUploader").change(function(evt){
                   var selectedFile = evt.target.files[0];
                   var reader = new FileReader();
@@ -120,13 +114,10 @@
 
                        // Comprobar valor de json_object
                         console.log(json_object);
-
-  // Falta Cambiar la id de los beneficiarios por Apellidos y Nombre         
-  //                  var idBenefic = json_object.PRIMERAPELLIDO;
-  
-                    firebase.database().ref('eventos/evento1/beneficiarios/').update(JSON.parse(json_object)) ({
+                        
+                    firebase.database().ref('eventos/evento1/beneficiarios/').set(JSON.parse(json_object)) ({
                       
-                          });
+                          })
                        
                       })
                   };
@@ -136,13 +127,11 @@
                   reader.readAsBinaryString(selectedFile);
             });
                 
- // Quiero mostrar el resultado ya escrito en la base de datos  console.log(firebase.database().ref('eventos/evento1/beneficiarios').snapshot());
+
       });
-
-
   </script>
     <input type="file" id="fileUploader" name="fileUploader" accept=".xls, .xlsx"/>
-    <br/>
+    </br></br>
     <label id="jsonObject"> JSON : </label>
 
     <!-- <script src="../firebase.js"></script> -->
@@ -183,22 +172,16 @@
     var isAnonymous = user.isAnonymous;
     var uid = user.uid;
     var emailVerificado="";
-    //var surol = firebase.database()ref('bancoDeAnfitriones/uid/srol');
     if (emailVerified===false){
       emailVerificado="Email No Verificado";
     }else{
       emailVerificado="Email Verificado";
-      firebase.database().ref('bancoDeAnfitriones/'+ uid ).update({
-        verificado: emailVerified,
-      });
     }
     var providerData = user.providerData;
     document.getElementById("logStatus").innerHTML="Activo como:  " + user.email +"<br/>"+ emailVerificado + "<br/>"+"User UID: " + user.uid;
     document.getElementById("userUid").innerHTML="User UID: "+user.uid;
-    console.log(user.email);
+    console.log(user);
     console.log(uid);
-    //console.log(user);
-    //console.log(surol);
     // ...
   } else {
     // User is signed out.
@@ -209,134 +192,7 @@
 var database = firebase.database();
 
 </script>
-
-
-<hr/>
-<h4>Area de Confirmación y Entrega de Beneficiarios</h4>
-
-<input id="buscaPorCURP" type="text" placeholder="Ingresa CURP">Busca por CURP
 <br/>
-<button id="">Buscar</button>
-<br/><br/>
-<input id="buscaPorPApellido" type="text" placeholder="Primer Apellido">Busca por Apellidos
-<br/>
-<input id="buscaPorSApellido" type="text" placeholder="Segundo Apellido">
-<br/>
-<button id="">Buscar</button>
-<button id="" onclick="busca_benef()">Buscar2</button>
-
-
-<form>
-  Cadena a buscar <input id="searchTerm" type="text" onkeyup="doSearch()" />
-</form>
-
-
-<table id="datos">
-  <thead>
-         <tr>
-             <th>P Apellido</th>
-             <th>S Apellido</th>
-             <th>Nombre</th>
-             <th>CURP</th>                                    
-          </tr>
-  </thead>
-  <tbody id="tabla">                                
-  </tbody>
-</table>
-<script>
-
-  function busca_benef() {    
-
-   var db = firebase.database();
-// Falta insertar el nombre del evento o su ID generado   
-   var ref = db.ref('eventos/evento1/beneficiarios');
-        
-   var table = document.getElementById('tabla');
-       
-   //limpia la tabla
-   table.innerHTML = "";
-    
-    //con esta función recorre todos los datos almacenados en database ordenados por mi child(tipo)
-       
-   ref.orderByChild("PRIMERAPELLIDO").on("child_added", function(snapshot){
-   //repite el proceso como cuantas referencias encuentre y los asigna a la lista "d"
-        
-     var d = snapshot.val();        
-           
-     {
-     var row = table.insertRow(0);
-     var cell1 = row.insertCell(0);
-     var cell2 = row.insertCell(1);
-     var cell3 = row.insertCell(2);
-     var cell4 = row.insertCell(3);
-     
-     // asigna a las celdas el valor del Child especificado
-     cell1.innerHTML = d.PRIMERAPELLIDO;
-     cell2.innerHTML = d.SEGUNDOAPELLIDO;
-     cell3.innerHTML = d.NOMBRE;
-     cell4.innerHTML = d.CURP;
-     }
-    
-           
-   });
-    
-   }
-
-</script>
-
-
-
-<script language="javascript">
-  function doSearch()
-  {
-      const tableReg = document.getElementById('datos');
-      const searchText = document.getElementById('searchTerm').value.toLowerCase();
-      let total = 0;
-
-      // Recorremos todas las filas con contenido de la tabla
-      for (let i = 1; i < tableReg.rows.length; i++) {
-          // Si el td tiene la clase "noSearch" no se busca en su cntenido
-          if (tableReg.rows[i].classList.contains("noSearch")) {
-              continue;
-          }
-
-          let found = false;
-          const cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
-          // Recorremos todas las celdas
-          for (let j = 0; j < cellsOfRow.length && !found; j++) {
-              const compareWith = cellsOfRow[j].innerHTML.toLowerCase();
-              // Buscamos el texto en el contenido de la celda
-              if (searchText.length == 0 || compareWith.indexOf(searchText) > -1) {
-                  found = true;
-                  total++;
-              }
-          }
-          if (found) {
-              tableReg.rows[i].style.display = '';
-          } else {
-              // si no ha encontrado ninguna coincidencia, esconde la
-              // fila de la tabla
-              tableReg.rows[i].style.display = 'none';
-          }
-      }
-
-      // mostramos las coincidencias
-      const lastTR=tableReg.rows[tableReg.rows.length-1];
-      const td=lastTR.querySelector("td");
-      lastTR.classList.remove("hide", "red");
-      if (searchText == "") {
-          lastTR.classList.add("hide");
-      } else if (total) {
-          td.innerHTML="Se ha encontrado "+total+" coincidencia"+((total>1)?"s":"");
-      } else {
-          lastTR.classList.add("red");
-          td.innerHTML="No se han encontrado coincidencias";
-      }
-  }
-</script>
-
-
-
 
 
 
